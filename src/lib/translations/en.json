@@ -81,16 +81,6 @@
         "country": "Country"
       }
     },
-    
-    "relativeTime": {
-        "justNow": "just now",
-        "minutesAgo": "{count} minute ago",
-        "hoursAgo": "{count} hour ago",
-        "daysAgo": "{count} day ago"
-
-    
-
-    },
     "time": {
       "minutesAgo": {
         "one": "{count} minute ago",

@@ -60,6 +60,8 @@
 		"svelte"
 	],
 	"dependencies": {
-		"@sveltejs/adapter-static": "^3.0.8"
+		"@sveltejs/adapter-static": "^3.0.8",
+		"@types/bun": "^1.2.8",
+		"zod": "^3.24.2"
 	}
 }
