@@ -1,7 +1,8 @@
-// src/i18n.ts
+/// <reference path="./svelte5-runes.d.ts" />
+
+// src/lib/i18n.svelte.ts
 import { dev } from "$app/environment";
 import en from '$lib/translations/en.json'; // Base English translations
-import type {Paths} from "$lib/types"
 
 // --- Type Definitions ---
 
@@ -26,11 +27,13 @@ export type NestedTranslations = {
   [key: string]: TranslationValue;
 } 
 
-// Type for the complete translations object, holding potentially loaded locales
-// Using Partial<> because 'es' and 'fr' are loaded dynamically.
-// `typeof en` ensures all translation files conform to the same base structure.
-type Translations = Record<Locale, Paths<typeof en>>;
-
+// Type for the complete translations object
+// Make all locales except 'en' optional since they're lazy-loaded
+type Translations = {
+  en: typeof en;
+  es?: typeof en;
+  fr?: typeof en;
+};
 
 // Options for initializing the locale
 export interface InitLocaleOptions {
@@ -46,7 +49,7 @@ export interface SetLocaleOptions {
 
 // Options for the i18n Svelte action
 export interface I18nActionOptions {
-  key: string; // Changed from K extends string for simplicity, can be enhanced later
+  key: string;
   params?: Record<string, unknown>;
   count?: number;
 }
@@ -73,20 +76,16 @@ const translations = $state<Translations>({
 // Initialized by checking saved locale or using fallback.
 let currentLocale = $state<Locale>(getSavedLocale());
 
-export const locale = ()=> currentLocale
-
-
+export const locale = () => currentLocale;
 
 // Reactive state for tracking failed locale loading attempts
 const failedLocaleLoads = $state<Partial<Record<Locale, boolean>>>({});
-
-
 
 // --- Helper Functions ---
 
 // Type guard for locale validation
 function isValidLocale(locale: string | null | undefined): locale is Locale {
-  return typeof locale === 'string' && ['en', 'es', 'fr'].includes(locale);
+  return typeof locale === 'string' && (['en', 'es', 'fr'] as string[]).includes(locale);
 }
 
 // Helper to get saved locale from localStorage or return fallback
@@ -108,7 +107,6 @@ function getSavedLocale(): Locale {
 }
 
 // Browser language detection helper
-// Now correctly checks against *possible* locales, not just *loaded* ones.
 export function detectBrowserLocale(): Locale {
   if (typeof navigator === 'undefined') {
     return config.fallbackLocale; // Return fallback if navigator is not available (SSR)
@@ -127,9 +125,8 @@ function getNestedValue(obj: NestedTranslations | undefined, path: string): Tran
             return (prev as NestedTranslations)[curr];
         }
         return undefined; // Path broken or value not found
-    }, obj);
+    }, obj as TranslationValue);
 }
-
 
 // Enhanced parameter replacement with support for advanced formatting
 function applyParams(str: string, params?: Record<string, unknown>): string {
@@ -150,10 +147,10 @@ function applyParams(str: string, params?: Record<string, unknown>): string {
       }
 
       // Date formatting
-      const isDateLike = value instanceof Date || (typeof value === 'string' && !isNaN(Date.parse(value))) || typeof value === 'number';
+      const isDateLike = value instanceof Date || (typeof value === 'string' && !isNaN(Date.parse(String(value)))) || typeof value === 'number';
       if (formatType && isDateLike) {
         try {
-          const dateValue = new Date(value);
+          const dateValue = value instanceof Date ? value : new Date(value as string | number);
           if (isNaN(dateValue.getTime())) throw new Error("Invalid Date"); // Avoid formatting invalid dates
 
           switch (formatType) {
@@ -172,7 +169,6 @@ function applyParams(str: string, params?: Record<string, unknown>): string {
                const diffHour = Math.round(diffMin / 60);
                const diffDay = Math.round(diffHour / 24);
                
-
                if (diffSec < 60 && diffSec >= 0) return t('relativeTime.justNow', undefined, undefined) || 'just now'; // Example: Use translation key for "just now"
                if (diffMin < 60 && diffMin > 0) return t('relativeTime.minutesAgo', { count: diffMin }, diffMin) || `${diffMin}m ago`;
                if (diffHour < 24 && diffHour > 0) return t('relativeTime.hoursAgo', { count: diffHour }, diffHour) || `${diffHour}h ago`;
@@ -182,7 +178,7 @@ function applyParams(str: string, params?: Record<string, unknown>): string {
             }
             default:
               // Try to use as Intl.DateTimeFormat options (if JSON-like)
-              if (formatType.startsWith('{') && formatType.endsWith('}')) {
+              if (typeof formatType === 'string' && formatType.charAt(0) === '{' && formatType.charAt(formatType.length - 1) === '}') {
                 try {
                   const options = JSON.parse(formatType);
                   return new Intl.DateTimeFormat(currentLocale, options).format(dateValue);
@@ -220,7 +216,7 @@ function applyParams(str: string, params?: Record<string, unknown>): string {
                     case 'currency':
                         options = { style: 'currency', currency: currencyCode };
                         break;
-                    default:
+                    default: {
                         // Check if formatType is a number (for fixed digits)
                         const precision = parseInt(formatType, 10);
                         if (!isNaN(precision) && precision >= 0) {
@@ -228,7 +224,7 @@ function applyParams(str: string, params?: Record<string, unknown>): string {
                                 minimumFractionDigits: precision,
                                 maximumFractionDigits: precision
                             };
-                        } else if (formatType.startsWith('{') && formatType.endsWith('}')) {
+                        } else if (typeof formatType === 'string' && formatType.charAt(0) === '{' && formatType.charAt(formatType.length - 1) === '}') {
                             // Try parsing as JSON Intl options
                              try {
                                 options = JSON.parse(formatType);
@@ -241,6 +237,7 @@ function applyParams(str: string, params?: Record<string, unknown>): string {
                              }
                         }
                          // else: Unrecognized format, use default toLocaleString
+                    } // End of default block scope
                 }
                  return new Intl.NumberFormat(currentLocale, options).format(value);
             }
@@ -255,16 +252,19 @@ function applyParams(str: string, params?: Record<string, unknown>): string {
       // Array formatting (simple join or Intl.ListFormat if available)
       if (Array.isArray(value)) {
         const stringValues = value.map(item => String(item)); // Ensure all items are strings
+        // Check if Intl.ListFormat is supported before using it
         if (formatType === 'list' && typeof Intl !== 'undefined' && 'ListFormat' in Intl) {
           try {
-            // Type assertion needed as ListFormat might not be in default TS lib types yet
-            return new (Intl as unknown as { ListFormat: typeof Intl.ListFormat }).ListFormat(currentLocale).format(stringValues);
+            // Now we know ListFormat exists, so we can type it correctly
+            const formatter = new Intl.ListFormat(currentLocale);
+            return formatter.format(stringValues);
           } catch (e) {
              if (config.debug) console.warn(`Error using Intl.ListFormat for key "${key}":`, value, e);
-             // Fall through to comma-separated list
+             // Fall through to comma-separated list if ListFormat fails unexpectedly
           }
         }
-        return stringValues.join(', '); // Default fallback for arrays
+        // Fallback if ListFormat is not supported or formatType is not 'list'
+        return stringValues.join(', ');
       }
 
       // Default: convert value to string
@@ -281,7 +281,6 @@ function applyParams(str: string, params?: Record<string, unknown>): string {
   });
 }
 
-
 // --- Public API ---
 
 /**
@@ -289,7 +288,11 @@ function applyParams(str: string, params?: Record<string, unknown>): string {
  * @param options - Partial configuration object to override defaults.
  */
 export function configure(options: Partial<I18nConfig>): void {
-  Object.assign(config, options);
+  // Use manual property assignment instead of Object.assign
+  if (options.persistLocale !== undefined) config.persistLocale = options.persistLocale;
+  if (options.localStorageKey !== undefined) config.localStorageKey = options.localStorageKey;
+  if (options.fallbackLocale !== undefined) config.fallbackLocale = options.fallbackLocale;
+  
   // Re-evaluate debug setting based on potential override
   config.debug = options.debug !== undefined ? options.debug : dev;
 }
@@ -330,7 +333,7 @@ export function initLocale(options: InitLocaleOptions = {}): void {
 
   // 3. Use detected locale or the default/fallback locale
   // Use setLocale to handle dynamic loading if necessary. 'silent' prevents errors on initial load failure.
-  setLocale(detectedLocale ?? opts.defaultLocale, { silent: true });
+  void setLocale(detectedLocale ?? opts.defaultLocale, { silent: true });
 
   if (config.debug) {
     console.log(`i18n initialized. Locale set to: ${currentLocale}. Strategy: ${detectedLocale ? (opts.preferStorage && localStorage.getItem(config.localStorageKey) ? 'Storage' : 'Browser') : 'Default/Fallback'}`);
@@ -420,13 +423,13 @@ export async function setLocale(newLocale: Locale, options: SetLocaleOptions = {
  * Translates a given key using the current locale.
  * Supports nested keys (dot notation), parameter interpolation, and pluralization.
  *
- * @param key - Translation key (e.g., 'greeting', 'user.profile. K').
+ * @param key - Translation key (e.g., 'greeting', 'user.profile.title').
  * @param params - Optional parameters for interpolation (e.g., { name: 'John' }).
  * @param count - Optional count for pluralization.
  * @returns The translated string, or a fallback representation if not found.
  */
 export function t(
-  key: Translations[Locale],
+  key: string,
   params?: Record<string, unknown>,
   count?: number
 ): string {
@@ -449,11 +452,9 @@ export function t(
   if (translationValue !== undefined) {
     // Handle plural forms if count is provided and value is an object
     if (typeof translationValue === 'object' && translationValue !== null && count !== undefined) {
-      // Assume it's a PluralObject based on structure
-      const pluralRules = new Intl.PluralRules(localeToUse);
-      const rule = pluralRules.select(count); // 'zero', 'one', 'two', 'few', 'many', 'other'
-
-      const pluralForm = (translationValue as PluralObject)[rule] ?? (translationValue as PluralObject)['other'];
+      // Handle pluralization using simple logic for older browsers/environments
+      const pluralForm = (translationValue as PluralObject)[count === 1 ? 'one' : 'other'] ?? 
+                         (translationValue as PluralObject)['other'];
 
       if (typeof pluralForm === 'string') {
         // Apply params, ensuring 'count' is available if needed (e.g., "{count} items")
@@ -461,7 +462,7 @@ export function t(
       } else {
          // Plural form for the rule/other not found
          if (config.debug) {
-            console.warn(`Plural form for rule '${rule}' or 'other' not found for key '${key}' in locale '${localeToUse}'.`);
+            console.warn(`Plural form not found for key '${key}' in locale '${localeToUse}'.`);
          }
          // Fall through to return key representation
       }
@@ -484,28 +485,19 @@ export function t(
 
     // Optional: Collect missing keys globally for reporting
     if (typeof window !== 'undefined') {
-      if (!(window as any).__i18nMissingKeys) {
-        (window as any).__i18nMissingKeys = new Set<string>();
+      if (!(window).__i18nMissingKeys) {
+        (window).__i18nMissingKeys = new Set<string>();
       }
-      (window as any).__i18nMissingKeys.add(`${localeToUse}:${key}`);
+      (window).__i18nMissingKeys.add(`${localeToUse}:${key}`);
     }
      // Show key clearly in development
      return `[${key}]`;
   }
 
   // In production, return the last part of the key as a minimal fallback
-  return key.split('.').pop() || key;
+  const parts = key.split('.');
+  return parts[parts.length - 1] || key;
 }
-
-/**
- * Svelte Action for reactive translations on an HTML element.
- * Updates the element's textContent whenever the locale or parameters change.
- *
- * @param node - The HTMLElement to apply the translation to.
- * @param options - Object containing the translation key, params, and count.
- */
-
-
 
 // --- Type Augmentation for Global ---
 // Needed for window.__i18nMissingKeys if used
@@ -517,37 +509,3 @@ declare global {
     // myErrorTrackingService?: { captureException: (error: Error, context: any) => void };
   }
 }
-
-/*
-// --- Optional: Advanced Key Typing (Example) ---
-// This can improve developer experience with key autocompletion but adds complexity.
-// Define helper types to generate dot-notation paths from the translation structure.
-
-type IsValueRecord<T> = T extends Record<infer K, infer V> ? true : false;
-type IsPluralObject<T> = T extends Record<string, string> ? true : false; // Basic check
-
-type Paths<T, Prev extends string = ''> =
-  // Stop if T is not an object or is a PluralObject (treat as endpoint)
-  T extends object ? IsPluralObject<T> extends true ? Prev : (
-    {
-      [K in keyof T]-?: K extends string | number // Filter string/number keys
-      ? `${Prev extends '' ? '' : `${Prev}.`}${K}` | Paths<T[K], `${Prev extends '' ? '' : `${Prev}.`}${K}`> // Recurse
-      : never; // Ignore symbols
-    }[keyof T] extends infer P // Grab the union of paths
-      ? P extends string // Ensure it's a string path
-          ? T extends (string | PluralObject | any[]) // If current level holds final value (string, plural, array)
-              ? Prev | P // Include both path to object AND deeper paths if any
-              : P // Only include deeper paths
-          : Prev // Fallback if no string paths found
-      : never // Should not happen
-  ) : Prev; // Return path if T is not an object
-
-
-// Derive the keys type from the English translations structure
-export type TranslationKey = Paths<typeof en>;
-
-// Then you could potentially use it in `t`:
-// export function t(key: TranslationKey, ...): string;
-// Note: Complex nested structures might hit TS limits or performance issues.
-// Using `string` as the key type is often more practical.
-*/
