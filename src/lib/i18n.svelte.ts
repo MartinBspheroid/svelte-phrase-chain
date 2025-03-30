@@ -3,6 +3,7 @@
 // src/lib/i18n.svelte.ts
 import { dev } from "$app/environment";
 import en from '$lib/translations/en.json'; // Base English translations
+import type { Paths } from "./types";
 
 // --- Type Definitions ---
 
@@ -29,11 +30,9 @@ export type NestedTranslations = {
 
 // Type for the complete translations object
 // Make all locales except 'en' optional since they're lazy-loaded
-type Translations = {
-  en: typeof en;
-  es?: typeof en;
-  fr?: typeof en;
-};
+type Translations = Record<Locale, Paths<typeof en>>;
+
+export type TranslationKey = Paths<typeof en>;
 
 // Options for initializing the locale
 export interface InitLocaleOptions {
@@ -68,9 +67,11 @@ const config: I18nConfig = {
 
 // Dynamically imported translations store
 // Initially only contains 'en', others are loaded on demand.
+// Use type assertion here to reconcile the provided type `Translations`
+// with the actual structure being stored ({ en: object }).
 const translations = $state<Translations>({
   en
-});
+} as unknown as Translations);
 
 // Reactive state for the current locale (with localStorage persistence)
 // Initialized by checking saved locale or using fallback.
@@ -127,6 +128,29 @@ function getNestedValue(obj: NestedTranslations | undefined, path: string): Tran
         return undefined; // Path broken or value not found
     }, obj as TranslationValue);
 }
+
+// Helper to find translation value, handling fallback
+function findTranslationValue(
+    key: string, 
+    primaryLocale: Locale, 
+    fallbackLocale: Locale,
+    allTranslations: Translations // Pass the whole state
+): TranslationValue | undefined {
+    // Use type assertion here due to the restrictive `Translations` type
+    const primaryObj = allTranslations[primaryLocale] as unknown as NestedTranslations | undefined;
+    let value = getNestedValue(primaryObj, key);
+
+    if (value === undefined && primaryLocale !== fallbackLocale) {
+        // Use type assertion for fallback as well
+        const fallbackObj = allTranslations[fallbackLocale] as unknown as NestedTranslations | undefined;
+        value = getNestedValue(fallbackObj, key);
+        if (config.debug && value !== undefined) {
+            console.warn(`Translation key '${key}' not found in '${primaryLocale}', using fallback '${fallbackLocale}'.`);
+        }
+    }
+    return value;
+}
+
 
 // Enhanced parameter replacement with support for advanced formatting
 function applyParams(str: string, params?: Record<string, unknown>): string {
@@ -373,7 +397,8 @@ export async function setLocale(newLocale: Locale, options: SetLocaleOptions = {
       // Use dynamic import to load the JSON file
       const module = await import(`./translations/${newLocale}.json`);
       // Store the loaded translations (module.default assumes Vite/Rollup JSON handling)
-      translations[newLocale] = module.default;
+      // Use type assertion here as well, consistent with the state initialization.
+      translations[newLocale] = module.default as unknown as Paths<typeof en>;
 
       // Clear from failed cache if it was there before
       if (failedLocaleLoads[newLocale]) {
@@ -429,26 +454,16 @@ export async function setLocale(newLocale: Locale, options: SetLocaleOptions = {
  * @returns The translated string, or a fallback representation if not found.
  */
 export function t(
-  key: string,
+  key: Translations[Locale], // Keep this type for the input key
   params?: Record<string, unknown>,
   count?: number
 ): string {
-  const localeToUse = currentLocale; // Capture current locale for consistency within this function call
-  const primaryTranslations = translations[localeToUse];
-  const fallbackTranslations = translations[config.fallbackLocale]; // Use configured fallback
+  const localeToUse = currentLocale; // Capture current locale for consistency
 
-  // 1. Try finding the translation in the current locale
-  let translationValue = getNestedValue(primaryTranslations, key);
+  // 1. Find the translation value using the new helper
+  const translationValue = findTranslationValue(key, localeToUse, config.fallbackLocale, translations);
 
-  // 2. If not found in current locale, try the fallback locale (unless current is already fallback)
-  if (translationValue === undefined && localeToUse !== config.fallbackLocale) {
-    translationValue = getNestedValue(fallbackTranslations, key);
-     if (config.debug && translationValue !== undefined) {
-        console.warn(`Translation key '${key}' not found in '${localeToUse}', using fallback '${config.fallbackLocale}'.`);
-     }
-  }
-
-  // 3. Handle the found value (string, plural object, or undefined)
+  // 2. Handle the found value (string, plural object, or undefined)
   if (translationValue !== undefined) {
     // Handle plural forms if count is provided and value is an object
     if (typeof translationValue === 'object' && translationValue !== null && count !== undefined) {

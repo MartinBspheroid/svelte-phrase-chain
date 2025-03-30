@@ -2,7 +2,7 @@
     import { t, setLocale, locale, initLocale } from '$lib/i18n.svelte';
     import Translation from './components/translation.svelte';
 	import type { Locale } from '$lib/i18n.svelte';
-    
+    import { SaveTest } from './components/ts-test';
     // Initialize with browser detection
     initLocale({ preferBrowser: true, preferStorage: true });
     
@@ -49,6 +49,7 @@
   
   <main>
     <header>
+
       <h1 class="title">{t('common.welcome')}</h1>
       <p class="subtitle">{t('common.greeting', { name: userName })}</p>
       
@@ -156,9 +157,11 @@
     </section>
     
     <footer>
-      <p>{t('common.footer')}</p>
+      <!-- Typescript test: -->
+      <p>{t(SaveTest)}</p>
       <p><Translation key="common.loading" /></p>
     </footer>
+
   </main>
   
   <style>
