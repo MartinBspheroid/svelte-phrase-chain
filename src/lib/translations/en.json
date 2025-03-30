@@ -1,0 +1,108 @@
+{
+    "common": {
+      "welcome": "Welcome to our app",
+      "greeting": "Hello, {name}!",
+      "footer": "© 2025 Awesome App. All rights reserved.",
+      "loading": "Loading...",
+      "actions": {
+        "save": "Save",
+        "cancel": "Cancel",
+        "edit": "Edit",
+        "delete": "Delete",
+        "confirm": "Confirm"
+      }
+    },
+    "nav": {
+      "home": "Home",
+      "products": "Products",
+      "dashboard": "Dashboard",
+      "settings": "Settings",
+      "profile": "Profile",
+      "logout": "Log out"
+    },
+    "auth": {
+      "login": "Log in",
+      "signup": "Sign up",
+      "email": "Email address",
+      "password": "Password",
+      "forgotPassword": "Forgot password?",
+      "rememberMe": "Remember me",
+      "loginSuccess": "Welcome back, {name}!",
+      "loginFailure": "Login failed. Please check your credentials."
+    },
+    "errors": {
+      "notFound": "Page not found",
+      "serverError": "Server error occurred",
+      "networkError": "Network connection lost",
+      "validationError": "Please correct the errors below",
+      "requiredField": "This field is required",
+      "invalidEmail": "Please enter a valid email address",
+      "passwordLength": "Password must be at least {length} characters long"
+    },
+    "products": {
+      "search": "Search products...",
+      "filter": "Filter",
+      "sort": "Sort",
+      "price": "Price: {price}",
+      "addToCart": "Add to cart",
+      "outOfStock": "Out of stock",
+      "sale": "Sale",
+      "new": "New",
+      "rating": "{rating} out of 5 stars"
+    },
+    "user": {
+      "profile": "User Profile",
+      "settings": "Account Settings",
+      "language": "Language",
+      "notifications": "Notifications",
+      "privacy": "Privacy",
+      "joinDate": "Member since {date:date}",
+      "lastLogin": "Last login: {date:relative}",
+      "followerCount": {
+        "zero": "No followers",
+        "one": "{count} follower",
+        "other": "{count} followers"
+      },
+      "messageCount": {
+        "zero": "No messages",
+        "one": "You have {count} unread message",
+        "other": "You have {count} unread messages"
+      },
+      "purchaseCount": {
+        "zero": "No purchases yet",
+        "one": "{count} purchase",
+        "other": "{count} purchases"
+      },
+      "address": {
+        "title": "Address",
+        "street": "Street",
+        "city": "City",
+        "postalCode": "Postal Code",
+        "country": "Country"
+      }
+    },
+    
+    "relativeTime": {
+        "justNow": "just now",
+        "minutesAgo": "{count} minute ago",
+        "hoursAgo": "{count} hour ago",
+        "daysAgo": "{count} day ago"
+
+    
+
+    },
+    "time": {
+      "minutesAgo": {
+        "one": "{count} minute ago",
+        "other": "{count} minutes ago"
+      },
+      "hoursAgo": {
+        "one": "{count} hour ago",
+        "other": "{count} hours ago"
+      },
+      "daysAgo": {
+        "one": "{count} day ago",
+        "other": "{count} days ago"
+      }
+    }
+  }

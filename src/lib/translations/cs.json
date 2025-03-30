@@ -1,0 +1,110 @@
+{
+    "common": {
+      "welcome": "Vítejte v naší aplikaci",
+      "greeting": "Ahoj, {name}!",
+      "footer": "© 2025 Awesome App. Všechna práva vyhrazena.",
+      "loading": "Načítání...",
+      "actions": {
+        "save": "Uložit",
+        "cancel": "Zrušit",
+        "edit": "Upravit",
+        "delete": "Smazat",
+        "confirm": "Potvrdit"
+      }
+    },
+    "nav": {
+      "home": "Domů",
+      "products": "Produkty",
+      "dashboard": "Nástěnka",
+      "settings": "Nastavení",
+      "profile": "Profil",
+      "logout": "Odhlásit se"
+    },
+    "auth": {
+      "login": "Přihlásit se",
+      "signup": "Registrovat se",
+      "email": "E-mailová adresa",
+      "password": "Heslo",
+      "forgotPassword": "Zapomněli jste heslo?",
+      "rememberMe": "Zapamatovat si mě",
+      "loginSuccess": "Vítejte zpět, {name}!",
+      "loginFailure": "Přihlášení selhalo. Zkontrolujte prosím své přihlašovací údaje."
+    },
+    "errors": {
+      "notFound": "Stránka nenalezena",
+      "serverError": "Došlo k chybě serveru",
+      "networkError": "Ztráta připojení k síti",
+      "validationError": "Opravte prosím níže uvedené chyby",
+      "requiredField": "Toto pole je povinné",
+      "invalidEmail": "Zadejte prosím platnou e-mailovou adresu",
+      "passwordLength": "Heslo musí mít alespoň {length} znaků"
+    },
+    "products": {
+      "search": "Hledat produkty...",
+      "filter": "Filtrovat",
+      "sort": "Seřadit",
+      "price": "Cena: {price}",
+      "addToCart": "Přidat do košíku",
+      "outOfStock": "Vyprodáno",
+      "sale": "Sleva",
+      "new": "Nové",
+      "rating": "{rating} z 5 hvězdiček"
+    },
+    "user": {
+      "profile": "Uživatelský profil",
+      "settings": "Nastavení účtu",
+      "language": "Jazyk",
+      "notifications": "Oznámení",
+      "privacy": "Soukromí",
+      "joinDate": "Členem od {date:date}",
+      "lastLogin": "Poslední přihlášení: {date:relative}",
+      "followerCount": {
+        "zero": "Žádní sledující",
+        "one": "{count} sledující",
+        "few": "{count} sledující",
+        "many": "{count} sledujících",
+        "other": "{count} sledujících"
+      },
+      "messageCount": {
+        "zero": "Žádné zprávy",
+        "one": "Máte {count} nepřečtenou zprávu",
+        "few": "Máte {count} nepřečtené zprávy",
+        "many": "Máte {count} nepřečtených zpráv",
+        "other": "Máte {count} nepřečtených zpráv"
+      },
+      "purchaseCount": {
+        "zero": "Zatím žádné nákupy",
+        "one": "{count} nákup",
+        "few": "{count} nákupy",
+        "many": "{count} nákupů",
+        "other": "{count} nákupů"
+      },
+      "address": {
+        "title": "Adresa",
+        "street": "Ulice",
+        "city": "Město",
+        "postalCode": "PSČ",
+        "country": "Země"
+      }
+    },
+    "time": {
+      "minutesAgo": {
+        "one": "před {count} minutou",
+        "few": "před {count} minutami",
+        "many": "před {count} minutami",
+        "other": "před {count} minutami"
+      },
+      "hoursAgo": {
+        "one": "před {count} hodinou",
+        "few": "před {count} hodinami",
+        "many": "před {count} hodinami",
+        "other": "před {count} hodinami"
+      },
+      "daysAgo": {
+        "one": "před {count} dnem",
+        "few": "před {count} dny",
+        "many": "před {count} dny",
+        "other": "před {count} dny"
+      }
+    }
+  }

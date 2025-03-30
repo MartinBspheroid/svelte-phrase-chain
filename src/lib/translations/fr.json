@@ -1,0 +1,98 @@
+{
+    "common": {
+      "welcome": "Bienvenue sur notre application",
+      "greeting": "Bonjour, {name} !",
+      "footer": "© 2025 Awesome App. Tous droits réservés.",
+      "loading": "Chargement...",
+      "actions": {
+        "save": "Enregistrer",
+        "cancel": "Annuler",
+        "edit": "Modifier",
+        "delete": "Supprimer",
+        "confirm": "Confirmer"
+      }
+    },
+    "nav": {
+      "home": "Accueil",
+      "products": "Produits",
+      "dashboard": "Tableau de bord",
+      "settings": "Paramètres",
+      "profile": "Profil",
+      "logout": "Déconnexion"
+    },
+    "auth": {
+      "login": "Connexion",
+      "signup": "S'inscrire",
+      "email": "Adresse e-mail",
+      "password": "Mot de passe",
+      "forgotPassword": "Mot de passe oublié ?",
+      "rememberMe": "Se souvenir de moi",
+      "loginSuccess": "Bon retour, {name} !",
+      "loginFailure": "Échec de la connexion. Veuillez vérifier vos identifiants."
+    },
+    "errors": {
+      "notFound": "Page non trouvée",
+      "serverError": "Erreur serveur survenue",
+      "networkError": "Connexion réseau perdue",
+      "validationError": "Veuillez corriger les erreurs ci-dessous",
+      "requiredField": "Ce champ est obligatoire",
+      "invalidEmail": "Veuillez entrer une adresse e-mail valide",
+      "passwordLength": "Le mot de passe doit comporter au moins {length} caractères"
+    },
+    "products": {
+      "search": "Rechercher des produits...",
+      "filter": "Filtrer",
+      "sort": "Trier",
+      "price": "Prix : {price}",
+      "addToCart": "Ajouter au panier",
+      "outOfStock": "Rupture de stock",
+      "sale": "Soldes",
+      "new": "Nouveau",
+      "rating": "{rating} sur 5 étoiles"
+    },
+    "user": {
+      "profile": "Profil Utilisateur",
+      "settings": "Paramètres du Compte",
+      "language": "Langue",
+      "notifications": "Notifications",
+      "privacy": "Confidentialité",
+      "joinDate": "Membre depuis {date:date}",
+      "lastLogin": "Dernière connexion : {date:relative}",
+      "followerCount": {
+        "zero": "Aucun abonné",
+        "one": "{count} abonné",
+        "other": "{count} abonnés"
+      },
+      "messageCount": {
+        "zero": "Aucun message",
+        "one": "Vous avez {count} message non lu",
+        "other": "Vous avez {count} messages non lus"
+      },
+      "purchaseCount": {
+        "zero": "Aucun achat pour l'instant",
+        "one": "{count} achat",
+        "other": "{count} achats"
+      },
+      "address": {
+        "title": "Adresse",
+        "street": "Rue",
+        "city": "Ville",
+        "postalCode": "Code Postal",
+        "country": "Pays"
+      }
+    },
+    "time": {
+      "minutesAgo": {
+        "one": "il y a {count} minute",
+        "other": "il y a {count} minutes"
+      },
+      "hoursAgo": {
+        "one": "il y a {count} heure",
+        "other": "il y a {count} heures"
+      },
+      "daysAgo": {
+        "one": "il y a {count} jour",
+        "other": "il y a {count} jours"
+      }
+    }
+  }

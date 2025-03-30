@@ -1,0 +1,98 @@
+{
+    "common": {
+      "welcome": "Bienvenido a nuestra aplicación",
+      "greeting": "¡Hola, {name}!",
+      "footer": "© 2025 Awesome App. Todos los derechos reservados.",
+      "loading": "Cargando...",
+      "actions": {
+        "save": "Guardar",
+        "cancel": "Cancelar",
+        "edit": "Editar",
+        "delete": "Eliminar",
+        "confirm": "Confirmar"
+      }
+    },
+    "nav": {
+      "home": "Inicio",
+      "products": "Productos",
+      "dashboard": "Panel",
+      "settings": "Configuración",
+      "profile": "Perfil",
+      "logout": "Cerrar sesión"
+    },
+    "auth": {
+      "login": "Iniciar sesión",
+      "signup": "Registrarse",
+      "email": "Correo electrónico",
+      "password": "Contraseña",
+      "forgotPassword": "¿Olvidaste tu contraseña?",
+      "rememberMe": "Recordarme",
+      "loginSuccess": "¡Bienvenido de nuevo, {name}!",
+      "loginFailure": "Error de inicio de sesión. Por favor, verifica tus credenciales."
+    },
+    "errors": {
+      "notFound": "Página no encontrada",
+      "serverError": "Ocurrió un error en el servidor",
+      "networkError": "Conexión de red perdida",
+      "validationError": "Por favor, corrige los errores a continuación",
+      "requiredField": "Este campo es obligatorio",
+      "invalidEmail": "Por favor, ingresa una dirección de correo válida",
+      "passwordLength": "La contraseña debe tener al menos {length} caracteres"
+    },
+    "products": {
+      "search": "Buscar productos...",
+      "filter": "Filtrar",
+      "sort": "Ordenar",
+      "price": "Precio: {price}",
+      "addToCart": "Añadir al carrito",
+      "outOfStock": "Agotado",
+      "sale": "Oferta",
+      "new": "Nuevo",
+      "rating": "{rating} de 5 estrellas"
+    },
+    "user": {
+      "profile": "Perfil de Usuario",
+      "settings": "Configuración de la Cuenta",
+      "language": "Idioma",
+      "notifications": "Notificaciones",
+      "privacy": "Privacidad",
+      "joinDate": "Miembro desde {date:date}",
+      "lastLogin": "Último inicio de sesión: {date:relative}",
+      "followerCount": {
+        "zero": "Sin seguidores",
+        "one": "{count} seguidor",
+        "other": "{count} seguidores"
+      },
+      "messageCount": {
+        "zero": "Sin mensajes",
+        "one": "Tienes {count} mensaje sin leer",
+        "other": "Tienes {count} mensajes sin leer"
+      },
+      "purchaseCount": {
+        "zero": "Sin compras aún",
+        "one": "{count} compra",
+        "other": "{count} compras"
+      },
+      "address": {
+        "title": "Dirección",
+        "street": "Calle",
+        "city": "Ciudad",
+        "postalCode": "Código Postal",
+        "country": "País"
+      }
+    },
+    "time": {
+      "minutesAgo": {
+        "one": "hace {count} minuto",
+        "other": "hace {count} minutos"
+      },
+      "hoursAgo": {
+        "one": "hace {count} hora",
+        "other": "hace {count} horas"
+      },
+      "daysAgo": {
+        "one": "hace {count} día",
+        "other": "hace {count} días"
+      }
+    }
+  }
