@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "moduleResolution": "nodenext",
+    "module": "NodeNext",
+    "target": "ES2020",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "outDir": "dist",
+    "types": ["node"]
+  },
+  "include": ["src/cli.ts"],
+  "exclude": ["node_modules", "src/lib", "src/routes", "e2e"]
+}

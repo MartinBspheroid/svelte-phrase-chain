@@ -15,6 +15,6 @@
 		"noFallthroughCasesInSwitch": true,
 		"sourceMap": true,
 		"strict": true,
-		"moduleResolution": "bundler"
+		"moduleResolution": "nodenext"
 	  }
 }

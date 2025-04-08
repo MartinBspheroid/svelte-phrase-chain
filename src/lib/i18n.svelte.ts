@@ -1,4 +1,3 @@
-/// <reference path="./svelte5-runes.d.ts" />
 
 // src/lib/i18n.svelte.ts
 import { dev } from "$app/environment";
