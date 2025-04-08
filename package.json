@@ -2,25 +2,25 @@
 	"name": "svelte-phrase-chain",
 	"version": "0.0.3-beta.1",
 	"bin": {
-		"svelte-phrase-chain": "./dist/cli.js"
+		"svelte-phrase-chain": "dist/cli.js"
 	},
 	"scripts": {
 		"dev": "vite dev",
-		"build": "vite build && npm run build:cli && npm run prepack",
+		"build": "vite build && bun prepack",
 		"build:cli": "tsc --project tsconfig.cli.json",
 		"build:test": "vite build",
 		"preview": "vite preview",
 		"prepare": "svelte-kit sync || echo ''",
-		"prepack": "svelte-kit sync && svelte-package && publint",
+		"prepack": "svelte-kit sync && svelte-package &&  bun build:cli && publint",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"lint": "eslint . && prettier --check .",
 		"test:e2e": "playwright test",
-		"test": "npm run test:e2e",
+		"test": "bun test:e2e",
 		"format": "prettier --write ."
 	},
 	"files": [
-		"dist",
+		"dist/**/**",
 		"!dist/**/*.test.*",
 		"!dist/**/*.spec.*"
 	],
