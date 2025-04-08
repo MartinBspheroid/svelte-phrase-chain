@@ -6,7 +6,8 @@
 	},
 	"scripts": {
 		"dev": "vite dev",
-		"build": "vite build && npm run prepack",
+		"build": "vite build && npm run build:cli && npm run prepack",
+		"build:cli": "tsc --project tsconfig.cli.json",
 		"build:test": "vite build",
 		"preview": "vite preview",
 		"prepare": "svelte-kit sync || echo ''",
