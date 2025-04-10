@@ -70,7 +70,7 @@ export const locale = () => currentLocale;
 const failedLocaleLoads = $state<Partial<Record<Locale, boolean>>>({});
 
 function isValidLocale(locale: string | null | undefined): locale is Locale {
-  return typeof locale === 'string' && ['cs', 'sk', 'en'].includes(locale);
+  return typeof locale === 'string' && ['en', 'es', 'fr';].includes(locale);
 }
 
 function getSavedLocale(): Locale {
