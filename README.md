@@ -1,5 +1,46 @@
 # Svelte Phrase Chain
 
+## 🛠️ CLI Quickstart (Template-Driven Setup)
+
+Svelte Phrase Chain now uses a template-driven CLI for project initialization, ensuring maintainability and seamless updates.
+
+### 1. Install the package
+
+```bash
+bun add svelte-phrase-chain
+# or: npm install svelte-phrase-chain
+```
+
+### 2. Run the CLI to initialize i18n
+
+```bash
+npx svelte-phrase-chain init
+```
+
+The CLI will:
+- Prompt you for configuration (locales, fallback, storage, etc.)
+- Generate `src/lib/i18n-config.ts`, `src/lib/i18n.ts`, and `src/lib/components/Translation.svelte` from templates
+- Create initial translation files in `src/lib/translations/`
+
+### 3. Import core i18n logic from the package
+
+Your generated `src/lib/i18n.ts` will look like:
+
+```ts
+import { setupI18n } from 'svelte-phrase-chain/core';
+import { i18nConfig } from './i18n-config';
+import en from './translations/en.json';
+
+export type Locale = 'en' | 'es' | 'fr'; // Example
+export const { t, locale, setLocale, initLocale } = setupI18n<Locale>(i18nConfig);
+```
+
+**Why this is better:**
+- Core i18n logic is always up-to-date (no code duplication)
+- You can customize your config and templates, but bugfixes and features are delivered via package updates
+
+---
+
 A powerful, type-safe internationalization (i18n) library for Svelte applications. Built with Svelte 5 runes and TypeScript for a modern, reactive localization experience.
 
 [![Made with Svelte](https://img.shields.io/badge/Made%20With-Svelte-FF3E00?style=flat-square&logo=svelte)](https://svelte.dev/)
