@@ -6,7 +6,10 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "outDir": "dist",
-    "types": ["node"]
+    "types": ["node"],
+    "noEmit": false, // Explicitly override noEmit
+    "declaration": true, // Generate .d.ts files
+    "sourceMap": true // Generate .js.map files
   },
   "include": ["src/cli.ts"],
   "exclude": ["node_modules", "src/lib", "src/routes", "e2e"]
