@@ -6,6 +6,7 @@
 		"checkJs": true,
 		"esModuleInterop": true,
 		"forceConsistentCasingInFileNames": true,
+		
 		"resolveJsonModule": true,
 		"skipLibCheck": true,
 		"allowUnusedLabels": false,
@@ -15,6 +16,7 @@
 		"noFallthroughCasesInSwitch": true,
 		"sourceMap": true,
 		"strict": true,
-		"moduleResolution": "nodenext"
+		"moduleResolution": "bundler",
+		"module": "ESNext"
 	  }
 }
