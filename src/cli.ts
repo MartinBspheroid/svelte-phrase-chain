@@ -82,7 +82,7 @@ async function main() {
       const filePath = path.join(translationsDir, `${locale}.json`);
       if (!fs.existsSync(filePath)) {
         const content = {
-          greeting: greetings[locale as keyof typeof greetings] || "Here's hello in " + locale + "language"
+          greetings: greetings[locale as keyof typeof greetings] || "Here's hello in " + locale + "language"
         };
         fs.writeFileSync(filePath, JSON.stringify(content, null, 2), 'utf-8');
         console.log(`Created ${filePath}`);
@@ -93,31 +93,22 @@ async function main() {
   }
 
   // Generate i18n.svelte.ts content
-  const localeUnion = localesArray.map((l: string) => `'${l}'`).join(' | ');
+  const localesArrayString = localesArray.map((l: string) => `'${l}'`).join(', ');
 
-  // Read the template file
-  const templatePath = path.join(process.cwd(), '..', 'templates', 'basic', 'i18n.ts.tpl');
+  // Read the updated template file
+  // Adjust path relative to the built cli.js location in dist/
+  const templatePath = path.resolve(process.cwd(), '..', 'templates', 'basic', 'i18n.ts.tpl');
   let i18nContent = fs.readFileSync(templatePath, 'utf-8');
 
-  // Replace the placeholders with actual values
-  i18nContent = i18nContent.replace('{{LOCALES}}', localeUnion);
+  // Replace the placeholders with actual values from options
+  i18nContent = i18nContent.replace('{{LOCALES_ARRAY}}', localesArrayString);
+  i18nContent = i18nContent.replace(/{{FALLBACK_LOCALE}}/g, fallbackLocale); // Use regex for global replace if needed multiple times
+  i18nContent = i18nContent.replace('{{PERSIST_LOCALE}}', String(persistLocale));
+  i18nContent = i18nContent.replace('{{LOCALSTORAGE_KEY}}', localStorageKey);
+  i18nContent = i18nContent.replace('{{DEBUG}}', String(debug));
 
-  // Read the i18n-config template file
-  const configTemplatePath = path.join(process.cwd(), '..', 'templates', 'basic', 'i18n-config.ts.tpl');
-  let i18nConfigContent = fs.readFileSync(configTemplatePath, 'utf-8');
-
-  // Replace the placeholders with actual values
-  i18nConfigContent = i18nConfigContent.replace('{{PERSIST_LOCALE}}', String(persistLocale));
-  i18nConfigContent = i18nConfigContent.replace('{{LOCALSTORAGE_KEY}}', localStorageKey);
-  i18nConfigContent = i18nConfigContent.replace('{{FALLBACK_LOCALE}}', fallbackLocale);
-  i18nConfigContent = i18nConfigContent.replace('{{DEBUG}}', String(debug));
-
-  const i18nConfigPath = path.join('src', 'lib', 'i18n-config.ts');
-  fs.mkdirSync(path.dirname(i18nConfigPath), { recursive: true });
-  fs.writeFileSync(i18nConfigPath, i18nConfigContent, 'utf-8');
-  console.log(`Generated ${i18nConfigPath}`);
-
-  const i18nPath = path.join('src', 'lib', 'i18n.svelte.ts');
+  // Define the output path for the generated i18n file
+  const i18nPath = path.join('src', 'lib', 'i18n.svelte.ts'); // Assuming execution from project root
   fs.mkdirSync(path.dirname(i18nPath), { recursive: true });
   fs.writeFileSync(i18nPath, i18nContent, 'utf-8');
   console.log(`Generated ${i18nPath}`);

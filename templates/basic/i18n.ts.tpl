@@ -1,13 +1,28 @@
+import BaseLanguage from './translations/{{FALLBACK_LOCALE}}.json'; // Base translations from fallback locale
 import { setupI18n } from 'svelte-phrase-chain/core';
-import { i18nConfig } from './i18n-config';
 
-// Define your available locales
-export type Locale = {{LOCALES}};
+// Define your available locales based on the CLI input
+export const locales = [{{LOCALES_ARRAY}}] as const;
 
-// Initialize and export i18n functions with type safety
-export const { t, locale, setLocale, initLocale } = setupI18n<Locale>(i18nConfig);
+// Define a type for available locales
+export type Locale = typeof locales[number];
 
-// Re-export useful types
-export type { TranslationKey } from 'svelte-phrase-chain/core';
+// Initialize and export i18n functions with type safety and configuration
+const { t, locale, setLocale, initLocale } = setupI18n<Locale, typeof BaseLanguage>({
+    fallbackLocale: '{{FALLBACK_LOCALE}}',
+    persistLocale: {{PERSIST_LOCALE}},
+    localStorageKey: '{{LOCALSTORAGE_KEY}}',
+    debug: {{DEBUG}},
+    loadTranslation: async (localeToLoad) => {
+        // Use Vite's static analysis friendly dynamic import
+        // Adjust the path based on your translations directory structure
+        const module = await import(`./translations/${localeToLoad}.json`);
+        return module.default;
+      }
+}, BaseLanguage);
 
-// You can add custom extensions or configurations here
+// Re-export useful types and functions
+export { t, locale, setLocale, initLocale };
+
+
+// You can add custom extensions or configurations here if needed
