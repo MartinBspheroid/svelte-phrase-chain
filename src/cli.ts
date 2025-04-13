@@ -97,7 +97,10 @@ async function main() {
 
   // Read the updated template file
   // Adjust path relative to the built cli.js location in dist/
-  const templatePath = path.resolve(process.cwd(), '..', 'templates', 'basic', 'i18n.ts.tpl');
+  const templatePath = path.resolve(import.meta.dirname, '../', 'templates', 'basic', 'i18n.ts.tpl')
+  
+  console.log("Exists??? : " + fs.existsSync(templatePath));
+  
   let i18nContent = fs.readFileSync(templatePath, 'utf-8');
 
   // Replace the placeholders with actual values from options
