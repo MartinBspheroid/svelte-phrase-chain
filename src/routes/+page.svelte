@@ -1,11 +1,8 @@
 <script lang="ts">
-    import { t, setLocale, locale, initLocale } from '$lib/i18n.svelte';
-    import Translation from './components/translation.svelte';
-	import type { Locale } from '$lib/i18n.svelte';
-    import { SaveTest } from './components/ts-test';
-    // Initialize with browser detection
-    initLocale({ preferBrowser: true, preferStorage: true });
+
+    import { t, setLocale, locale, type Locale } from '$lib/i18n.svelte';
     
+	//
     // User data for demos
     let userName = $state("Alex")
     let followerCount = $state(1);
@@ -42,9 +39,13 @@
       { code: 'cs', name: 'Čeština' }
     ];
     
+
+    
     function changeLocale(code: Locale) {
       setLocale(code);
     }
+    
+    
   </script>
   
   <main>
@@ -54,7 +55,7 @@
       <p class="subtitle">{t('common.greeting', { name: userName })}</p>
       
       <div class="language-selector">
-        <p><Translation key="user.language" tag="span" />:</p>
+        <p>{t("user.language")}:</p>
         <div class="locale-buttons">
           {#each locales as { code, name }}
             <button 
@@ -75,7 +76,7 @@
         <h3>1. Basic Text Translation</h3>
         <div class="examples">
           <p>Using t() function: <strong>{t('nav.home')}</strong>, <strong>{t('nav.products')}</strong>, <strong>{t('nav.settings')}</strong></p>
-          <p>Using component: <strong><Translation key="auth.login" /></strong>, <strong><Translation key="auth.signup" /></strong></p>
+         
         </div>
       </div>
       
@@ -91,6 +92,7 @@
       <div class="card">
         <h3>3. Date Formatting</h3>
         <div class="examples">
+          
           <p>{t('user.joinDate', { date: joinDate })}</p>
           <p>{t('user.lastLogin', { date: lastLoginDate })}</p>
         </div>
@@ -124,12 +126,12 @@
       <div class="card">
         <h3>5. Nested Keys</h3>
         <div class="examples">
-          <h4><Translation key="user.address.title" /></h4>
+          <h4>{t("user.address.title")}</h4>
           <p>
-            <Translation key="user.address.street" />: 123 Main St<br>
-            <Translation key="user.address.city" />: New York<br>
-            <Translation key="user.address.postalCode" />: 10001<br>
-            <Translation key="user.address.country" />: USA
+            {t("user.address.street")} : 123 Main St<br>
+            {t("user.address.city")} : New York<br>
+            {t("user.address.postalCode")} : 10001<br>
+            {t("user.address.country")} : USA
           </p>
         </div>
       </div>
@@ -158,8 +160,8 @@
     
     <footer>
       <!-- Typescript test: -->
-      <p>{t(SaveTest)}</p>
-      <p><Translation key="common.loading" /></p>
+      <!-- <p>{t(SaveTest)}</p> -->
+      <p>{t("common.loading")} </p>
     </footer>
 
   </main>

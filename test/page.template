@@ -1,0 +1,44 @@
+<script lang="ts">
+	import { t, setLocale, locale, initLocale } from '$lib/i18n.svelte';
+	
+	import type { Locale } from '$lib/i18n.svelte';
+	
+	// Initialize with browser detection
+	initLocale({ preferBrowser: true, preferStorage: true });
+
+
+	// Available locales
+	const locales = [
+		{ code: 'en', name: 'English' },
+		{ code: 'es', name: 'Español' },
+		{ code: 'fr', name: 'Français' },
+		{ code: 'de', name: 'Deutsch' },
+		{ code: 'cs', name: 'Čeština' }
+	];
+
+	function changeLocale(code: Locale) {
+		setLocale(code);
+	}
+</script>
+
+<main>
+	<h1><span>{t('greetings')}</span> svelte-phrase-chain!</h1>
+    <div>
+        <span
+            data-testid="current-locale"
+        >Current locale: {locale()}</span>
+        <button
+            data-testid="en-button"
+            onclick={()=>setLocale('en')}
+        >English</button>
+        <button
+            data-testid="es-button"
+            onclick={()=>setLocale('es')}
+        >Español</button>
+        <button
+            data-testid="fr-button"
+            onclick={()=>setLocale('fr')}
+        >Français</button>
+       
+    </div>
+</main>
