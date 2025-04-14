@@ -2,7 +2,7 @@ import type { I18nConfig, NestedTranslations, Paths, PluralObject, TranslationVa
 
 
 export const setupI18n = <Locale extends string, BaseLanguage extends Record<string, unknown>>(
-	config: I18nConfig,
+	config: I18nConfig<Locale>,
 	fallbackLocalization: Record<string, unknown>
 ) => {
 	// Type for the complete translations object

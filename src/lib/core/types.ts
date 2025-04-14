@@ -1,7 +1,5 @@
 // Type for the structure of a single translation file (matches en.json)
 
-import type { Locale } from '../i18n.svelte.ts'; // Corrected import path
-
 // It allows nested objects, strings, and specific plural objects.
 export type TranslationValue = string | PluralObject | NestedTranslations;
 export interface PluralObject {
@@ -10,12 +8,12 @@ export interface PluralObject {
 export type NestedTranslations = {
   [key: string]: TranslationValue;
 } 
-export interface I18nConfig {
+export interface I18nConfig<T extends string = string> {
     persistLocale: boolean;
     localStorageKey: string;
-    fallbackLocale: Locale;
+    fallbackLocale: string;
     debug: boolean;
-    loadTranslation?: (locale: Locale) => Promise<NestedTranslations>; // Corrected return type
+    loadTranslation?: (locale: T) => Promise<NestedTranslations>; // Corrected return type
   }
 
 

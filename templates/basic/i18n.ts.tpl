@@ -13,12 +13,21 @@ const { t, locale, setLocale, initLocale } = setupI18n<Locale, typeof BaseLangua
     persistLocale: {{PERSIST_LOCALE}},
     localStorageKey: '{{LOCALSTORAGE_KEY}}',
     debug: {{DEBUG}},
-    loadTranslation: async (localeToLoad) => {
-        // Use Vite's static analysis friendly dynamic import
-        // Adjust the path based on your translations directory structure
-        const module = await import(`./translations/${localeToLoad}.json`);
-        return module.default;
+    loadTranslation = async (localeToLoad: string) => {
+    // Use Vite's static analysis friendly dynamic import
+  const loaders = import.meta.glob('./translations/*.json');
+  console.log(loaders);
+  for await (const [key, value] of Object.entries(loaders)) {
+    
+      if (key.includes(localeToLoad)) {
+          const loader = (await value()) as {[key: string]: string};
+          console.log(loader);
+          return loader.default;   
       }
+  }
+  throw new Error(`Translations for locale ${localeToLoad} not found`);
+}
+
 }, BaseLanguage);
 
 // Re-export useful types and functions

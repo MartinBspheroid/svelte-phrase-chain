@@ -6,7 +6,7 @@
 	},
 	"scripts": {
 		"dev": "vite dev",
-		"build": "bun build:cli",
+		"build": "bun build:cli && bun build.ts",
 		"build:cli": "tsc --project tsconfig.cli.json",
 		"build:test": "vite build",
 		"preview": "vite preview",
@@ -66,7 +66,7 @@
 		"svelte-check": "^4.0.0",
 		"typescript": "^5.0.0",
 		"typescript-eslint": "^8.20.0",
-		"commander": "^13.1.0"
+		
 	},
 	"keywords": [
 		"svelte"
@@ -74,6 +74,7 @@
 	"dependencies": {
 		"@sveltejs/adapter-static": "^3.0.8",
 		"@types/bun": "^1.2.8",
-		"zod": "^3.24.2"
+		"zod": "^3.24.2",
+		"commander": "^13.1.0"
 	}
 }
