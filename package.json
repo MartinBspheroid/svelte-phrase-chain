@@ -33,13 +33,10 @@
 	],
 	"type": "module",
 	"exports": {
-		".": {
-			"types": "./src/lib/index.ts",
-			"import": "./src/lib/index.ts"
-		},
+	
 		"./core": {
-			"types": "./src/lib/core/index.svelte.ts",
-			"import": "./src/lib/core/index.svelte.ts"
+			"types": "./dist/core/index.svelte.ts",
+			"import": "./dist/core/index.svelte.ts"
 		}
 	},
 	"peerDependencies": {
@@ -65,7 +62,7 @@
 		"svelte": "^5.0.0",
 		"svelte-check": "^4.0.0",
 		"typescript": "^5.0.0",
-		"typescript-eslint": "^8.20.0",
+		"typescript-eslint": "^8.20.0"
 		
 	},
 	"keywords": [
