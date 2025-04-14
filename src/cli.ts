@@ -48,7 +48,7 @@ async function main() {
   .option('-f, --fallbackLocale <fallbackLocale>', 'Enter fallback locale', 'en')
   .option('-p, --persistLocale', 'Persist locale in localStorage', true)
   .option('-k, --localStorageKey <localStorageKey>', 'LocalStorage key for locale', 'app_locale')
-  .option('-t, --translationsDir <translationsDir>', 'Translations folder path', 'src/lib/translations')
+  .option('-t, --translationsDir <translationsDir>', 'Translations folder path', 'src/lib/i18n/translations')
   .option('-g, --generateTranslations', 'Generate initial translation JSON files', true)
   .option('-d, --debug', 'Enable debug logging', true)
   .action(async (options: {
@@ -136,7 +136,7 @@ async function main() {
   i18nContent = i18nContent.replace('{{DEBUG}}', String(debug));
 
   // Define the output path for the i18n config file
-  const i18nConfigPath = path.join('src', 'lib', 'i18n.ts'); // Target: src/lib/i18n.ts
+  const i18nConfigPath = path.join('src', 'lib', "i18n" , 'i18n.ts'); // Target: src/lib/i18n.ts
   fs.mkdirSync(path.dirname(i18nConfigPath), { recursive: true }); // Ensure src/lib exists
   fs.writeFileSync(i18nConfigPath, i18nContent, 'utf-8');
   console.log(`Generated i18n config file: ${i18nConfigPath}`);

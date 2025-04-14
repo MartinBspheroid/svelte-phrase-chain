@@ -1,5 +1,5 @@
 import BaseLanguage from './translations/{{FALLBACK_LOCALE}}.json'; // Base translations from fallback locale
-import { setupI18n } from 'svelte-phrase-chain/core';
+import { setupI18n } from './core/index.svelte';
 
 // Define your available locales based on the CLI input
 export const locales = [{{LOCALES_ARRAY}}] as const;
@@ -13,7 +13,7 @@ const { t, locale, setLocale, initLocale } = setupI18n<Locale, typeof BaseLangua
     persistLocale: {{PERSIST_LOCALE}},
     localStorageKey: '{{LOCALSTORAGE_KEY}}',
     debug: {{DEBUG}},
-    loadTranslation = async (localeToLoad: string) => {
+    loadTranslation : async (localeToLoad: string) => {
     // Use Vite's static analysis friendly dynamic import
   const loaders = import.meta.glob('./translations/*.json');
   console.log(loaders);
