@@ -6,12 +6,12 @@
 	},
 	"scripts": {
 		"dev": "vite dev",
-		"build": "bun build:cli && bun build.ts",
+		"build": "svelte-kit sync && svelte-package && bun build:cli && bun build.ts && publint",
 		"build:cli": "tsc --project tsconfig.cli.json",
 		"build:test": "vite build",
 		"preview": "vite preview",
 		"prepare": "svelte-kit sync || echo ''",
-		"prepack": "svelte-kit sync && bun build:cli && bun build.ts && publint",
+		"prepack": "bun run build.ts",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"lint": "eslint . && prettier --check .",
@@ -29,13 +29,7 @@
 		"**/*.css"
 	],
 	"type": "module",
-	"exports": {
 	
-		"./core": {
-			"types": "./dist/core/index.svelte.ts",
-			"import": "./dist/core/index.svelte.ts"
-		}
-	},
 	"peerDependencies": {
 		"svelte": "^5.0.0",
 		"vite": "^6.0.0"

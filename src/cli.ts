@@ -92,16 +92,41 @@ async function main() {
     }
   }
 
-  // Generate i18n.svelte.ts content
-  const localesArrayString = localesArray.map((l: string) => `'${l}'`).join(', ');
+  // --- Template File Handling ---
+  console.log("Reading template files...");
+  const baseTemplateDir = path.resolve(import.meta.dirname, '../', 'templates', 'basic');
 
-  // Read the updated template file
-  // Adjust path relative to the built cli.js location in dist/
-  const templatePath = path.resolve(import.meta.dirname, '../', 'templates', 'basic', 'i18n.ts.tpl')
-  
-  console.log("Exists??? : " + fs.existsSync(templatePath));
-  
-  let i18nContent = fs.readFileSync(templatePath, 'utf-8');
+  // Read i18n config template
+  const i18nTemplatePath = path.join(baseTemplateDir, 'i18n.ts.tpl');
+  if (!fs.existsSync(i18nTemplatePath)) {
+    console.error(`Error: Template file not found at ${i18nTemplatePath}`);
+    process.exit(1);
+  }
+  let i18nContent = fs.readFileSync(i18nTemplatePath, 'utf-8');
+  console.log(`Read ${path.basename(i18nTemplatePath)}`);
+
+  // Read core index template
+  const indexTemplatePath = path.join(baseTemplateDir, 'index.svelte.ts.tpl');
+   if (!fs.existsSync(indexTemplatePath)) {
+    console.error(`Error: Template file not found at ${indexTemplatePath}`);
+    process.exit(1);
+  }
+  const indexContent = fs.readFileSync(indexTemplatePath, 'utf-8');
+  console.log(`Read ${path.basename(indexTemplatePath)}`);
+
+  // Read core types template
+  const typesTemplatePath = path.join(baseTemplateDir, 'types.ts.tpl');
+   if (!fs.existsSync(typesTemplatePath)) {
+    console.error(`Error: Template file not found at ${typesTemplatePath}`);
+    process.exit(1);
+  }
+  const typesContent = fs.readFileSync(typesTemplatePath, 'utf-8');
+  console.log(`Read ${path.basename(typesTemplatePath)}`);
+
+
+  // --- Generate i18n Config File ---
+  console.log("Generating i18n configuration file...");
+  const localesArrayString = localesArray.map((l: string) => `'${l}'`).join(', ');
 
   // Replace the placeholders with actual values from options
   i18nContent = i18nContent.replace('{{LOCALES_ARRAY}}', localesArrayString);
@@ -110,11 +135,29 @@ async function main() {
   i18nContent = i18nContent.replace('{{LOCALSTORAGE_KEY}}', localStorageKey);
   i18nContent = i18nContent.replace('{{DEBUG}}', String(debug));
 
-  // Define the output path for the generated i18n file
-  const i18nPath = path.join('src', 'lib', 'i18n.svelte.ts'); // Assuming execution from project root
-  fs.mkdirSync(path.dirname(i18nPath), { recursive: true });
-  fs.writeFileSync(i18nPath, i18nContent, 'utf-8');
-  console.log(`Generated ${i18nPath}`);
+  // Define the output path for the i18n config file
+  const i18nConfigPath = path.join('src', 'lib', 'i18n.ts'); // Target: src/lib/i18n.ts
+  fs.mkdirSync(path.dirname(i18nConfigPath), { recursive: true }); // Ensure src/lib exists
+  fs.writeFileSync(i18nConfigPath, i18nContent, 'utf-8');
+  console.log(`Generated i18n config file: ${i18nConfigPath}`);
+
+
+  // --- Generate Core Library Files ---
+  console.log("Generating core library files...");
+  const coreLibDir = path.join('src', 'lib', 'i18n', 'core'); // Target: src/lib/i18n/core
+  fs.mkdirSync(coreLibDir, { recursive: true }); // Ensure src/lib/i18n/core exists
+
+  // Write index.svelte.ts
+  const coreIndexPath = path.join(coreLibDir, 'index.svelte.ts');
+  fs.writeFileSync(coreIndexPath, indexContent, 'utf-8');
+  console.log(`Generated core file: ${coreIndexPath}`);
+
+  // Write types.ts
+  const coreTypesPath = path.join(coreLibDir, 'types.ts');
+  fs.writeFileSync(coreTypesPath, typesContent, 'utf-8');
+  console.log(`Generated core file: ${coreTypesPath}`);
+
+  console.log("\nsvelte-phrase-chain initialization complete!");
   });
 
   program.parse(process.argv);
