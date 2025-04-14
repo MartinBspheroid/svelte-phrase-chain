@@ -1,6 +1,6 @@
 {
 	"name": "svelte-phrase-chain",
-	"version": "0.0.3-beta.11",
+	"version": "0.0.3-beta.12",
 	"bin": {
 		"svelte-phrase-chain": "dist/cli.js"
 	},
