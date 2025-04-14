@@ -11,7 +11,7 @@
 		"build:test": "vite build",
 		"preview": "vite preview",
 		"prepare": "svelte-kit sync || echo ''",
-		"prepack": "svelte-kit sync && bun build:cli && publint",
+		"prepack": "svelte-kit sync && bun build:cli && bun build.ts && publint",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"lint": "eslint . && prettier --check .",
@@ -22,10 +22,7 @@
 		"clean": "rm -rf dist && rm -rf build && rm -rf test-app"
 	},
 	"files": [
-		"src/lib",
-		"dist/cli.js",
-		"dist/cli.d.ts",
-		"dist/cli.js.map",
+		"dist",
 		"templates"
 	],
 	"sideEffects": [
